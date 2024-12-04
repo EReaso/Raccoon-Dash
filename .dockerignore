@@ -1,9 +1,9 @@
-__pycache__/
+.git
+__pycache__
 *.pyc
-upload/
-config.json
-get-docker.sh
-*.jpeg
-*.jpg
-*.png
+*.pyo
+*.pyd
+Dockerfile
+.dockerignore
+node_modules
 
