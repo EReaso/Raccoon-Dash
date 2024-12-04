@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block title %}
+	Weather Data for Raccoon Dash
+{% endblock %}
+
+{% block links %}
+	{#    <link rel="stylesheet" href="/static/css/weather.css">#}
+{% endblock %}
+
+{% block body %}
+	<div class="container py-3 d-flex flex-column gap-3">
+		{% for day in data %}
+			<div class="border d-flex flex-row align-content-center gap-3 px-3 py-2 shadow rounded">
+				<img class="object-fit-contain" src="{{ day['condition_icon_url'] }}">
+				<div><h2>{{ day["day"] }}</h2><small>{{ day["date"] }}</small></div>
+				<div class="vr"></div>
+				<div>High: {{ day["high"] }}°F
+					<hr>
+					Low: {{ day["low"] }}°F
+				</div>
+				<!-- TODO: Add rain/snow -->
+			</div>
+		{% endfor %}
+	</div>
+	<div class="container">
+		<span>Last Updated {{ updated_time }}</span>
+		<a href="javascript:location.href = '/weather/'">Reload</a>
+	</div>
+{% endblock %}

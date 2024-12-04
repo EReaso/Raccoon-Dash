@@ -1,0 +1,40 @@
+iframe {
+    width: 100%;
+    border: none;
+    flex: auto;
+}
+
+body {
+    display: flex;
+    height: 98vh;
+}
+
+#drawer {
+    flex: auto;
+    display: none;
+    flex-direction: column;
+    min-width: 25%;
+}
+
+#drawer_close_btn {
+    text-align: center;
+}
+
+html, body {
+    height: 100%;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    display: flex;
+}
+
+#cal {
+    height: 95%;
+    width: 95%;
+    border: none;
+    margin: 0;
+}
+
