@@ -3,60 +3,41 @@ name: Build and Push Docker Image to GHCR
 on:
   push:
     branches:
-      - main  # Trigger on pushes to the main branch
+      - main  # Trigger on push to the main branch
 
 permissions:
-  contents: read  # Required to clone the repo
-  packages: write # Required to push to GHCR
+  contents: read   # Required to clone the repository
+  packages: write  # Required to push to GHCR
 
 jobs:
   build-and-push:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-latest  # Use a GitHub-hosted runner
 
     steps:
-    # Step 1: Checkout code
-    - name: Checkout Code
-      uses: actions/checkout@v3
-
-    # Step 2: Log in to GitHub Container Registry
-    - name: Log in to GitHub Container Registry
-      run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
-
-    # Step 3: Build the Docker image
-    - name: Build Docker Image
-      run: |
-        docker build -t ghcr.io/${{ github.repository_owner }}/${{ github.event.repository.name }}:latest .
-
-    # Step 4: Push the Docker image to GHCR
-    - name: Push Docker Image to GHCR
-      run: |
-        docker push ghcr.io/${{ github.repository_owner }}/${{ github.event.repository.name }}:latest
-
-
-
-  workflow_dispatch:
-
-jobs:
-  build:
-    runs-on: ubuntu-latest
-    steps:
+      # Step 1: Checkout code
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v3  # This checks out the repository
 
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v2
-
+      # Step 2: Log in to GitHub Container Registry
       - name: Log in to GitHub Container Registry
-        uses: docker/login-action@v2
-        with:
-          registry: ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
+        run: echo "${{ secrets.GHCR_PAT }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+        env:
+          GHCR_PAT: ${{ secrets.GHCR_PAT }}  # Make sure you've added this secret
 
-      - name: Build and push Docker image
+      # Step 3: Build Docker Image with lowercase repo name and username
+      - name: Build Docker Image
         run: |
-          docker build -t ghcr.io/iraccoon13/raccoon-dash:latest .
-          docker push ghcr.io/iraccoon13/raccoon-dash:latest
+          IMAGE_TAG="ghcr.io/$(echo ${{ github.repository_owner }} | tr '[:upper:]' '[:lower:]')/$(echo ${{ github.event.repository.name }} | tr '[:upper:]' '[:lower:]'):latest"
+          echo "Building image with tag: $IMAGE_TAG"
+          docker build -t $IMAGE_TAG .
+        
+      # Step 4: Push Docker Image to GHCR
+      - name: Push Docker Image to GHCR
+        run: |
+          IMAGE_TAG="ghcr.io/$(echo ${{ github.repository_owner }} | tr '[:upper:]' '[:lower:]')/$(echo ${{ github.event.repository.name }} | tr '[:upper:]' '[:lower:]'):latest"
+          echo "Pushing image: $IMAGE_TAG"
+          docker push $IMAGE_TAG
 
+      # Step 5: Clean up Docker images
       - name: Clean up Docker images
-        run: docker system prune -f
+        run: docker system prune -f  # Optional: cleans up unused Docker images
