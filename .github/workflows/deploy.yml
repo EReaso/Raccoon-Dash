@@ -27,15 +27,17 @@ jobs:
     - name: Build Docker Image
       run: |
         IMAGE_TAG="ghcr.io/${{ github.repository_owner }}/raccoon-dash:latest"
-        echo "Image tag: $IMAGE_TAG"
-        docker build -t $IMAGE_TAG .
+        IMAGE_TAG_LOWER=$(echo $IMAGE_TAG | tr '[:upper:]' '[:lower:]')
+        echo "Image tag (lowercase): $IMAGE_TAG_LOWER"
+        docker build -t $IMAGE_TAG_LOWER .
 
     # Step 4: Push the Docker image to GHCR
     - name: Push Docker Image to GHCR
       run: |
         IMAGE_TAG="ghcr.io/${{ github.repository_owner }}/raccoon-dash:latest"
-        echo "Pushing image: $IMAGE_TAG"
-        docker push $IMAGE_TAG
+        IMAGE_TAG_LOWER=$(echo $IMAGE_TAG | tr '[:upper:]' '[:lower:]')
+        echo "Pushing image: $IMAGE_TAG_LOWER"
+        docker push $IMAGE_TAG_LOWER
 
     # Step 5: Clean up Docker images
     - name: Clean up Docker images
