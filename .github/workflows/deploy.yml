@@ -1,13 +1,8 @@
-<<<<<<< HEAD
 name: Build and Push Docker Image to GHCR
-=======
-name: Deploy to GitHub Container Registry
->>>>>>> ad4d99a360a4b18e8fad75e35c904d218900ba8f
 
 on:
   push:
     branches:
-<<<<<<< HEAD
       - main  # Trigger on pushes to the main branch
 
 permissions:
@@ -38,8 +33,7 @@ jobs:
         docker push ghcr.io/${{ github.repository_owner }}/${{ github.event.repository.name }}:latest
 
 
-=======
-      - main
+
   workflow_dispatch:
 
 jobs:
@@ -66,4 +60,3 @@ jobs:
 
       - name: Clean up Docker images
         run: docker system prune -f
->>>>>>> ad4d99a360a4b18e8fad75e35c904d218900ba8f
