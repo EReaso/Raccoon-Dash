@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main  # Trigger on pushes to the main branch
+  workflow_dispatch:  # Allow manual trigger of the workflow
 
 permissions:
   contents: read  # Required to clone the repo
@@ -31,3 +32,7 @@ jobs:
     - name: Push Docker Image to GHCR
       run: |
         docker push ghcr.io/${{ github.repository_owner }}/${{ github.event.repository.name }}:latest
+
+    # Step 5: Clean up Docker images
+    - name: Clean up Docker images
+      run: docker system prune -f
