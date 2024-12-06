@@ -8,13 +8,12 @@
 	<div class="d-flex flex-row vw-100 vh-100" id="container">
 		<iframe src="https://calendar.google.com/calendar/embed?height=600&wkst=1&ctz=America%2FDenver&bgcolor=%23ffffff&showTitle=0&showPrint=0&showCalendars=0&showTz=0&{{ calendar_q_string }}"
 		        id="cal" class="flex-fill"></iframe>
+		<button id="drawer_btn" class="btn btn-primary">></button>
 		<div id="drawer">
 			<iframe src="/weather/?loc={{ weather_loc }}&api_key={{ weather_api_key }}"
 			        class="flex-shrink-0 h-75 flex-grow-1"></iframe>
-			<button id="drawer_close_btn" class="btn btn-primary">></button>
 			<!-- TODO: add resize functionality -->
 		</div>
-		<button id="drawer_open_btn" class="btn btn-primary"><</button>
 		<!-- TODO: Make button into smaller, less ugly bump -->
 		<script src="/static/js/index.js"></script>
 		<!-- TODO: Add screensaver functionality -->
