@@ -1,18 +1,16 @@
 let drawer = document.querySelector("#drawer");
-let drawer_close_btn = document.querySelector("#drawer_close_btn");
-let drawer_open_btn = document.querySelector("#drawer_open_btn");
+let drawer_btn = document.querySelector("#drawer_btn");
 
-drawer_close_btn.onclick = () => {
-  drawer.style.display = "none";
-  drawer_open_btn.style.display = "initial";
-  console.log("closing drawer");
+drawer_btn.onclick = () => {
+  if (drawer.classList.contains("d-none")) {
+    drawer.classList.remove("d-none");
+    drawer_btn.innerHTML = ">";
+  } else {
+    drawer.classList.add("d-none");
+    drawer_btn.innerHTML = "<";
+  }
 }
 
-drawer_open_btn.onclick = (e) => {
-  drawer.style.display = "flex";
-  e.target.style.display = "none";
-  console.log("opening drawer");
-}
 
 // var maxInactivity = 10000;
 // let inactivityTimer = setTimeout(() => {
