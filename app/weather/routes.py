@@ -1,5 +1,6 @@
 import datetime
 import json
+import os
 
 import requests
 from flask import render_template
@@ -50,7 +51,7 @@ def get_weather(city, api_key):
 
 @bp.route("/weather/")
 def weather_route():
-	with open('/config.json') as f:
+	with open(os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', '..', 'config.json')) as f:
 		config = json.load(f)
 		try:
 			forecast_data = get_weather(config["weather_loc"], config["weather_api_key"])
