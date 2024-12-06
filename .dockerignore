@@ -1,9 +1,0 @@
-.git
-__pycache__
-*.pyc
-*.pyo
-*.pyd
-Dockerfile
-.dockerignore
-node_modules
-
