@@ -1,0 +1,199 @@
+{% extends "base.html" %}
+
+{% block title %}Raccoon Dash Settings{% endblock %}
+
+{% block body %}
+	<div class="container py-4">
+		<div class="row justify-content-center">
+			<div class="col-lg-10">
+				<!-- Header -->
+				<h1 class="h3 mb-4">Raccoon Dash Settings</h1>
+
+				<!-- Settings Form -->
+				<div class="card shadow-sm mb-4">
+					<div class="card-body">
+						<form method="POST" class="needs-validation" novalidate>
+							<div class="mb-3">
+								<label for="calendar_input" class="form-label">Calendar ID URL Arguments</label>
+								<input id="calendar_input" class="form-control" name="calendar" type="text"
+								       required autocomplete="off" autocapitalize="off"
+								       value="{{ config['calendar'] }}">
+								<div class="form-text">
+									<i class="bi bi-info-circle me-1"></i>
+									Copy the arguments after "?" from your Google Calendar embed URL
+								</div>
+							</div>
+
+							<div class="mb-3">
+								<label for="upload_folder_input" class="form-label">Upload Path</label>
+								<input class="form-control" id="upload_folder_input" name="upload_folder"
+								       type="text" required value="{{ config['upload'] }}">
+								<div class="form-text">
+									<i class="bi bi-info-circle me-1"></i>
+									Path where photos will be saved and read from
+								</div>
+							</div>
+
+							<div class="mb-3">
+								<label for="zip_code_input" class="form-label">Weather Zip Code</label>
+								<input class="form-control" id="zip_code_input" name="zip_code" type="text"
+								       maxlength="5" required pattern="\d{5}"
+								       value="{{ config['weather_loc'] }}">
+							</div>
+
+							<div class="mb-3">
+								<label for="screensaver_delay_input" class="form-label">Screensaver Delay</label>
+								<div class="input-group">
+									<input class="form-control" id="screensaver_delay_input"
+									       name="screensaver_delay" type="number" min="0" max="3600" required
+									       value="{{ config['screensaver_delay'] }}">
+									<span class="input-group-text">seconds</span>
+								</div>
+								<div class="form-text">Set to 0 to disable screensaver</div>
+							</div>
+
+							<div class="mb-3">
+								<label for="screensaver_rotate_delay_input" class="form-label">Photo Rotation</label>
+								<div class="input-group">
+									<input class="form-control" id="screensaver_rotate_delay_input"
+									       name="screensaver_rotate_delay" type="number"
+									       min="1" max="3600" required
+									       value="{{ config['screensaver_rotate_delay'] }}">
+									<span class="input-group-text">seconds</span>
+								</div>
+							</div>
+
+							<div class="text-end">
+								<button type="submit" class="btn btn-primary">
+									<i class="bi bi-save me-2"></i>Save Changes
+								</button>
+							</div>
+						</form>
+					</div>
+				</div>
+
+				<!-- Photo Gallery -->
+				<div class="card shadow-sm">
+					<div class="card-body">
+						<div class="d-flex justify-content-between align-items-center mb-4">
+							<h5 class="mb-0">Photo Gallery</h5>
+							<div class="btn-group">
+								<button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#uploadModal">
+									<i class="bi bi-cloud-upload me-2"></i>Upload Photos
+								</button>
+								<button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteAllModal">
+									<i class="bi bi-trash me-2"></i>Delete All
+								</button>
+							</div>
+						</div>
+
+						<div class="row g-3" id="photo_grid">
+							{% for photo in photos %}
+								<div class="col-6 col-sm-4 col-md-3 col-xl-2">
+									<div class="card h-100 shadow-sm">
+										<img src="{{ photo }}"
+										     class="card-img-top photo-thumbnail h-100 object-fit-cover"
+										     data-bs-toggle="modal"
+										     data-bs-target="#imageModal"
+										     data-photo-url="{{ photo }}"
+										     style="cursor: pointer;">
+									</div>
+								</div>
+							{% endfor %}
+						</div>
+
+						<!-- Pagination -->
+						<nav class="mt-4">
+							<ul class="pagination justify-content-center">
+								<li class="page-item {% if page == 1 %}disabled{% endif %}">
+									<a class="page-link" href="?page={{ page - 1 }}">Previous</a>
+								</li>
+								{% for p in range(1, total_pages + 1) %}
+									<li class="page-item {% if p == page %}active{% endif %}">
+										<a class="page-link" href="?page={{ p }}">{{ p }}</a>
+									</li>
+								{% endfor %}
+								<li class="page-item {% if page == total_pages %}disabled{% endif %}">
+									<a class="page-link" href="?page={{ page + 1 }}">Next</a>
+								</li>
+							</ul>
+						</nav>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- Upload Modal -->
+	<div class="modal fade" id="uploadModal" tabindex="-1">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title">Upload Photos</h5>
+					<button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+				</div>
+				<div class="modal-body">
+					<form id="photo_upload_form">
+						<div class="mb-3">
+							<label class="form-label">Select Images:</label>
+							<input class="form-control" type="file" name="photo" multiple accept="image/*">
+						</div>
+					</form>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+					<button type="submit" form="photo_upload_form" class="btn btn-primary">
+						<i class="bi bi-cloud-upload me-2"></i>Upload
+					</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- Preview Modal -->
+	<div class="modal fade" id="imageModal" tabindex="-1">
+		<div class="modal-dialog modal-lg modal-dialog-centered">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title">Preview</h5>
+					<button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+				</div>
+				<div class="modal-body p-0">
+					<img id="modalImage" class="img-fluid w-100" src="">
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Close</button>
+					<button type="button" class="btn btn-danger" id="deletePhotoBtn">
+						<i class="bi bi-trash me-2"></i>Delete
+					</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- Delete All Confirmation Modal -->
+	<div class="modal fade" id="deleteAllModal" tabindex="-1">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title text-danger">Delete All Photos</h5>
+					<button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+				</div>
+				<div class="modal-body">
+					<p class="text-danger">Warning: This action cannot be undone!</p>
+					<p>To confirm deletion of all photos, type "delete" in the box below:</p>
+					<input type="text" class="form-control" id="deleteConfirmInput" 
+						   placeholder="Type 'delete' to confirm">
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+					<button type="button" class="btn btn-danger" id="confirmDeleteAllBtn" disabled>
+						<i class="bi bi-trash me-2"></i>Delete All Photos
+					</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<script src="/static/js/admin.js"></script>
+{% endblock %}

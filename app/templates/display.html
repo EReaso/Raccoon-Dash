@@ -1,21 +1,46 @@
 {% extends "base.html" %}
 
 {% block title %}Raccoon Dash{% endblock %}
-{% block links %}
-	{#	<link rel="stylesheet" href="/static/css/index.css"#}
-{% endblock %}
 {% block body %}
 	<div class="d-flex flex-row vw-100 vh-100" id="container">
 		<iframe src="https://calendar.google.com/calendar/embed?height=600&wkst=1&ctz=America%2FDenver&bgcolor=%23ffffff&showTitle=0&showPrint=0&showCalendars=0&showTz=0&{{ calendar_q_string }}"
 		        id="cal" class="flex-fill"></iframe>
 		<button id="drawer_btn" class="btn btn-primary">></button>
-		<div id="drawer">
-			<iframe src="/weather/?loc={{ weather_loc }}&api_key={{ weather_api_key }}"
-			        class="flex-shrink-0 h-75 flex-grow-1"></iframe>
-			<!-- TODO: add resize functionality -->
+		<div class="d-flex flex-column">
+			<div id="drawer" class="d-flex flex-column h-100">
+				<iframe src="/weather/?loc={{ weather_loc }}&api_key={{ weather_api_key }}"
+				        class="flex-shrink-0 flex-grow-1"></iframe>
+				<!-- QR Code Button -->
+				<button id="qr_btn" class="btn btn-secondary m-2" data-bs-toggle="modal"
+				        data-bs-target="#qrModal">Settings...
+				</button>
+			</div>
 		</div>
-		<!-- TODO: Make button into smaller, less ugly bump -->
-		<script src="/static/js/index.js"></script>
-		<!-- TODO: Add screensaver functionality -->
+
+		<!-- QR Code Modal -->
+		<div class="modal fade" id="qrModal" tabindex="-1">
+			<div class="modal-dialog modal-dialog-centered">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title">Admin Page QR Code</h5>
+						<button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+					</div>
+					<div class="modal-body d-flex justify-content-center">
+						<canvas id="qrcode"></canvas>
+					</div>
+					<div class="modal-footer justify-content-center">
+						<span>Scan to access admin page</span>
+					</div>
+				</div>
+			</div>
+		</div>
 	</div>
+	<script>
+		// Make variables available to other scripts
+		const local_ip = "{{ local_ip }}";
+		const screensaver_delay = {{ screensaver_delay }};
+	</script>
+	<script src="https://cdn.jsdelivr.net/npm/qr-creator/dist/qr-creator.min.js"></script>
+	<script src="/static/js/display.js"></script>
+
 {% endblock %}

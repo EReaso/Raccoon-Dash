@@ -1,7 +1,9 @@
+import json
 import os
+import uuid
+import re
 
-from flask import current_app as app
-from flask import request, render_template, send_from_directory, redirect
+from flask import request, render_template, redirect, send_file
 from werkzeug.utils import secure_filename
 
 from app.photos import bp
@@ -9,48 +11,78 @@ from app.photos import bp
 
 @bp.route("/photos/", methods=["GET"])
 def photo_gallery():
-	photos = ["/photo/" + name + "/" for name in os.listdir(app.config['UPLOAD'])]
+	with open(os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', '..', 'config.json')) as f:
+		config = json.load(f)
+	photos = ["/photo/" + name + "/" for name in os.listdir(config['upload'])]
 	return render_template("gallery.html", photos=photos)
 
 
 @bp.route("/photos/", methods=["POST"])
 def upload_photo():
-	current_files = os.listdir(app.config['UPLOAD'])
+	with open(os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', '..', 'config.json')) as f:
+		config = json.load(f)
 	files = request.files.getlist('photo')
 	for f in files:
 		if f.filename == '':
 			continue
-		if secure_filename(f.filename) in current_files:
-			filename = secure_filename(f.filename + os.urandom(5).decode('ascii'))
-			f.save(os.path.join(app.config['UPLOAD'], filename))
-		else:
-			filename = secure_filename(f.filename)
-			f.save(os.path.join(app.config['UPLOAD'], filename))
+		
+		# Get base name and extension separately
+		base_name = os.path.splitext(secure_filename(f.filename))[0]
+		ext = os.path.splitext(f.filename)[1].lower()  # Lowercase extension
+		
+		# Clean the base name further - only allow alphanumeric and underscore
+		base_name = re.sub(r'[^a-zA-Z0-9_]', '', base_name)
+		
+		# Generate URL-safe unique filename
+		unique_suffix = uuid.uuid4().hex[:10]
+		filename = f"{base_name}_{unique_suffix}{ext}"
+		
+		f.save(os.path.join(config['upload'], filename))
 	return redirect("/photos/")
 
 
-@bp.route("/photo/<path:photo>/", methods=["GET"])
-def serve_photo(photo):
-	return send_from_directory(app.config['UPLOAD'], photo)
+@bp.route("/photo/<path:path>/", methods=["GET"])
+def serve_photo(path):
+	with open(os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', '..', 'config.json')) as f:
+		config = json.load(f)
+	print(path)
+	return send_file(os.path.join(config['upload'], path))
 
 
-@bp.route("/photo/<path:photo>/", methods=["DELETE"])
-def delete_photo(photo):
-	os.remove(os.path.join(app.config['UPLOAD'], photo))
+@bp.route("/photo/<path:path>/", methods=["DELETE"])
+def delete_photo(path):
+	with open(os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', '..', 'config.json')) as f:
+		config = json.load(f)
+	os.remove(os.path.join(config['upload'], path))
 	return "204 OK"
 
 
 @bp.route("/screensaver/", methods=["GET"])
-def serve_screensaver():
-	global total_images
-	total_images = len(request.args.get("path"))
-	return render_template("screensaver.html", total_images=total_images)
-
-
-@bp.route("/screensaver/image/", methods=["GET"])
-def screensaver_image():
+def screensaver_with_image():
+	with open(os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', '..', 'config.json')) as f:
+		config = json.load(f)
+	total_images = len(os.listdir(config["upload"]))
 	num = request.args.get("num", default=0, type=int)
-	if int(num) < 0 or int(num) >= total_images:
-		num = num % num
+	while num >= total_images:
+		num -= num
 
-	return send_from_directory(app.config['UPLOAD'], f"/photo/{os.listdir(app.config['UPLOAD'])[int(num)]}/")
+	return render_template("screensaver.html",
+	                      image=os.path.join(config['upload'], f"/photo/{os.listdir(config['upload'])[int(num)]}/"),
+	                      num=num, delay=config["screensaver_rotate_delay"])
+
+
+@bp.route("/photos/", methods=["DELETE"])
+def delete_all_photos():
+	try:
+		with open(os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', '..', 'config.json')) as f:
+			config = json.load(f)
+		
+		# Delete all files in the upload directory
+		for filename in os.listdir(config['upload']):
+			file_path = os.path.join(config['upload'], filename)
+			if os.path.isfile(file_path):
+				os.remove(file_path)
+		
+		return '', 204
+	except Exception as e:
+		return str(e), 500

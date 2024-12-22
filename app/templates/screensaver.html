@@ -1,21 +1,26 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Photo Slideshow Screensaver</title>
-    <link rel="stylesheet" href="/static/css/screensaver.css">
-</head>
-<body>
-<div class="slideshow-container">
-    <div class="slide active">
-        <img src="/screensaver/image/?num=0" alt="Image 1" id="current-image">
-    </div>
-    <div class="slide">
-        <img src="/screensaver/image/?num=1" id="next-image">
-    </div>
+{% extends "base.html" %}
+
+{% block title %}Screensaver{% endblock %}
+
+{% block body %}
+<div class="vw-100 vh-100 bg-black d-flex align-items-center justify-content-center">
+    <img src="{{ image }}" class="img-fluid" style="max-height: 100vh; max-width: 100vw; object-fit: contain;">
 </div>
-<data id="total-images" value="{{ total_images }}"></data>
-<script src="/static/js/screensaver.js"></script>
-</body>
-</html>
+
+<script>
+    // Return to display page on any interaction
+    function returnToDisplay() {
+        window.location.href = "/display/";
+    }
+
+    document.addEventListener('mousemove', returnToDisplay);
+    document.addEventListener('keypress', returnToDisplay);
+    document.addEventListener('click', returnToDisplay);
+    document.addEventListener('touchstart', returnToDisplay);
+
+    // Auto-advance to next photo
+    setTimeout(() => {
+        window.location.href = `/screensaver/?num={{ num + 1 }}`;
+    }, {{ delay }} * 1000);  // Convert seconds to milliseconds
+</script>
+{% endblock %}
