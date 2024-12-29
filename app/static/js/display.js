@@ -43,7 +43,7 @@ document.getElementById('qrModal').addEventListener('show.bs.modal', function ()
     // Use the server's IP address instead of localhost
     const protocol = window.location.protocol;
     const port = window.location.port;
-    const adminUrl = `${protocol}//${local_ip}${port ? ':' + port : ''}/`;
+    const adminUrl = `${protocol}//${window.location.hostname}${port ? ':' + port : ''}/`;
     
     // Generate QR code
     QrCreator.render({

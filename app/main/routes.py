@@ -15,7 +15,7 @@ def admin():
 		
 		# Pagination
 		page = request.args.get('page', 1, type=int)
-		per_page = 24  # 6x4 grid
+		per_page = 24
 		
 		# Get all photos
 		all_photos = ["/photo/" + name + "/" for name in os.listdir(config['upload'])]
@@ -68,6 +68,5 @@ def index():
 	return render_template('display.html', 
 	                      calendar_q_string=q_string, 
 	                      weather_api_key=weather_api_key,
-	                      weather_loc=weather_loc, 
-	                      local_ip=local_ip,
+	                      weather_loc=weather_loc,
 	                      screensaver_delay=config['screensaver_delay'])
