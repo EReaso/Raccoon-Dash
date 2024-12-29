@@ -9,14 +9,6 @@ from werkzeug.utils import secure_filename
 from app.photos import bp
 
 
-@bp.route("/photos/", methods=["GET"])
-def photo_gallery():
-	with open(os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', '..', 'config.json')) as f:
-		config = json.load(f)
-	photos = ["/photo/" + name + "/" for name in os.listdir(config['upload'])]
-	return render_template("gallery.html", photos=photos)
-
-
 @bp.route("/photos/", methods=["POST"])
 def upload_photo():
 	with open(os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', '..', 'config.json')) as f:
@@ -38,7 +30,7 @@ def upload_photo():
 		filename = f"{base_name}_{unique_suffix}{ext}"
 		
 		f.save(os.path.join(config['upload'], filename))
-	return redirect("/photos/")
+	return "204 OK"
 
 
 @bp.route("/photo/<path:path>/", methods=["GET"])
