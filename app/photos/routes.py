@@ -1,7 +1,7 @@
 import json
 import os
-import uuid
 import re
+import uuid
 
 from flask import request, render_template, redirect, send_file
 from werkzeug.utils import secure_filename
@@ -9,36 +9,28 @@ from werkzeug.utils import secure_filename
 from app.photos import bp
 
 
-@bp.route("/photos/", methods=["GET"])
-def photo_gallery():
-	with open(os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', '..', 'config.json')) as f:
-		config = json.load(f)
-	photos = ["/photo/" + name + "/" for name in os.listdir(config['upload'])]
-	return render_template("gallery.html", photos=photos)
-
-
-@bp.route("/photos/", methods=["POST"])
-def upload_photo():
+@bp.route("/", methods=["POST"])
+def upload_photos():
 	with open(os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', '..', 'config.json')) as f:
 		config = json.load(f)
 	files = request.files.getlist('photo')
 	for f in files:
 		if f.filename == '':
 			continue
-		
+
 		# Get base name and extension separately
 		base_name = os.path.splitext(secure_filename(f.filename))[0]
 		ext = os.path.splitext(f.filename)[1].lower()  # Lowercase extension
-		
+
 		# Clean the base name further - only allow alphanumeric and underscore
 		base_name = re.sub(r'[^a-zA-Z0-9_]', '', base_name)
-		
+
 		# Generate URL-safe unique filename
 		unique_suffix = uuid.uuid4().hex[:10]
 		filename = f"{base_name}_{unique_suffix}{ext}"
-		
+
 		f.save(os.path.join(config['upload'], filename))
-	return redirect("/photos/")
+	return redirect("/")
 
 
 @bp.route("/photo/<path:path>/", methods=["GET"])
@@ -67,22 +59,5 @@ def screensaver_with_image():
 		num -= num
 
 	return render_template("screensaver.html",
-	                      image=os.path.join(config['upload'], f"/photo/{os.listdir(config['upload'])[int(num)]}/"),
-	                      num=num, delay=config["screensaver_rotate_delay"])
-
-
-@bp.route("/photos/", methods=["DELETE"])
-def delete_all_photos():
-	try:
-		with open(os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', '..', 'config.json')) as f:
-			config = json.load(f)
-		
-		# Delete all files in the upload directory
-		for filename in os.listdir(config['upload']):
-			file_path = os.path.join(config['upload'], filename)
-			if os.path.isfile(file_path):
-				os.remove(file_path)
-		
-		return '', 204
-	except Exception as e:
-		return str(e), 500
+	                       image=os.path.join(config['upload'], f"/photo/{os.listdir(config['upload'])[int(num)]}/"),
+	                       num=num, delay=config["screensaver_rotate_delay"])
