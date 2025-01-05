@@ -81,11 +81,8 @@
 								<button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#uploadModal">
 									<i class="bi bi-cloud-upload me-2"></i>Upload Photos
 								</button>
-								<button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteAllModal">
-									<i class="bi bi-trash me-2"></i>Delete All
-								</button>
-							</div>
-						</div>
+					</div>
+				</div>
 
 						<div class="row g-3" id="photo_grid">
 							{% for photo in photos %}
@@ -165,30 +162,6 @@
 					<button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Close</button>
 					<button type="button" class="btn btn-danger" id="deletePhotoBtn">
 						<i class="bi bi-trash me-2"></i>Delete
-					</button>
-				</div>
-			</div>
-		</div>
-	</div>
-
-	<!-- Delete All Confirmation Modal -->
-	<div class="modal fade" id="deleteAllModal" tabindex="-1">
-		<div class="modal-dialog">
-			<div class="modal-content">
-				<div class="modal-header">
-					<h5 class="modal-title text-danger">Delete All Photos</h5>
-					<button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-				</div>
-				<div class="modal-body">
-					<p class="text-danger">Warning: This action cannot be undone!</p>
-					<p>To confirm deletion of all photos, type "delete" in the box below:</p>
-					<input type="text" class="form-control" id="deleteConfirmInput" 
-						   placeholder="Type 'delete' to confirm">
-				</div>
-				<div class="modal-footer">
-					<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-					<button type="button" class="btn btn-danger" id="confirmDeleteAllBtn" disabled>
-						<i class="bi bi-trash me-2"></i>Delete All Photos
 					</button>
 				</div>
 			</div>
