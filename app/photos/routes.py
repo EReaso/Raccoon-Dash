@@ -1,7 +1,7 @@
 import json
 import os
-import re
 import uuid
+import re
 
 from flask import request, render_template, redirect, send_file
 from werkzeug.utils import secure_filename
@@ -30,7 +30,7 @@ def upload_photos():
 		filename = f"{base_name}_{unique_suffix}{ext}"
 
 		f.save(os.path.join(config['upload'], filename))
-	return redirect("/")
+	return "204 OK"
 
 
 @bp.route("/photo/<path:path>/", methods=["GET"])
