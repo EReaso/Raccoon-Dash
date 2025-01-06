@@ -13,9 +13,11 @@ drawer_btn.onclick = () => {
 
 // Screensaver functionality
 let inactivityTimer;
+let debounceTimer;
 
 function resetInactivityTimer() {
   clearTimeout(inactivityTimer);
+  clearTimeout(debounceTimer);
   // Only set timer if screensaver delay is greater than 0
   if (screensaver_delay > 0) {
     inactivityTimer = setTimeout(() => {
@@ -24,13 +26,18 @@ function resetInactivityTimer() {
   }
 }
 
+function debounceResetInactivityTimer() {
+  clearTimeout(debounceTimer);
+  debounceTimer = setTimeout(resetInactivityTimer, 200);  // 200ms debounce
+}
+
 // Only set up event listeners if screensaver is enabled
 if (screensaver_delay > 0) {
   // Reset timer on any interaction
   document.addEventListener('mousemove', resetInactivityTimer);
   document.addEventListener('keypress', resetInactivityTimer);
   document.addEventListener('click', resetInactivityTimer);
-  document.addEventListener('touchstart', resetInactivityTimer);
+  document.addEventListener('touchstart', debounceResetInactivityTimer);
 
   // Initial setup of timer
   resetInactivityTimer();
