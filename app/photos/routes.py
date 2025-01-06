@@ -9,7 +9,7 @@ from werkzeug.utils import secure_filename
 from app.photos import bp
 
 
-@bp.route("/", methods=["POST"])
+@bp.route("/photos/", methods=["POST"])
 def upload_photos():
 	with open(os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', '..', 'config.json')) as f:
 		config = json.load(f)
