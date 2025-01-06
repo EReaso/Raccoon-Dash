@@ -13,9 +13,11 @@ document.querySelector("#photo_upload_form").onsubmit = async (e) => {
 }
 
 
+let modalImageUrl = ""
+
 document.querySelectorAll('.photo-thumbnail').forEach(img => {
   img.addEventListener('click', function() {
-    var modalImageUrl = this.dataset.photoUrl;
+    modalImageUrl = this.dataset.photoUrl;
     document.getElementById('modalImage').src = modalImageUrl;
   });
 });
