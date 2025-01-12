@@ -16,14 +16,7 @@
     document.addEventListener('mousemove', returnToDisplay);
     document.addEventListener('keypress', returnToDisplay);
     document.addEventListener('click', returnToDisplay);
-
-    let debounceTimer;
-    function debounceReturnToDisplay() {
-      clearTimeout(debounceTimer);
-      debounceTimer = setTimeout(returnToDisplay, 200);  // 200ms debounce
-    }
-
-    document.addEventListener('touchstart', debounceReturnToDisplay);
+    document.addEventListener('touchstart', returnToDisplay);
 
     // Auto-advance to next photo
     setTimeout(() => {
