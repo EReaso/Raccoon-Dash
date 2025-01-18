@@ -1,9 +1,9 @@
 import json
 import os
-import uuid
 import re
+import uuid
 
-from flask import request, render_template, redirect, send_file
+from flask import request, render_template, send_file
 from werkzeug.utils import secure_filename
 
 from app.photos import bp
@@ -50,14 +50,8 @@ def delete_photo(path):
 
 
 @bp.route("/screensaver/", methods=["GET"])
-def screensaver_with_image():
+def screensaver():
 	with open(os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', '..', 'config.json')) as f:
 		config = json.load(f)
-	total_images = len(os.listdir(config["upload"]))
-	num = request.args.get("num", default=0, type=int)
-	while num >= total_images:
-		num -= num
-
-	return render_template("screensaver.html",
-	                       image=os.path.join(config['upload'], f"/photo/{os.listdir(config['upload'])[int(num)]}/"),
-	                       num=num, delay=config["screensaver_rotate_delay"])
+	images = os.listdir(config["upload"])
+	return render_template("screensaver.html", images=images, delay=config["screensaver_rotate_delay"])
