@@ -28,16 +28,19 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     setAutoRotate(delay = this.delay) {
-      if (this.interval != undefined) {
+      if (this.interval !== undefined) {
         clearInterval(this.interval)
       }
       this.interval = setInterval(this.showNextPhoto, delay);
     }
 
-    clearAutoRotate() {
-      if (this.interval !== undefined) {
-        clearInterval(this.interval)
+    showPreviousPhoto = () => {
+      if (this.n > 0) {
+        this.n--;
+      } else {
+        this.n = this.images.length - 1;
       }
+      this.elem.setAttribute("src", `/photo/${images[this.n]}/`);
     }
   }
 
@@ -47,8 +50,33 @@ document.addEventListener('DOMContentLoaded', () => {
     // shuffle the image array defined in HTML
     shuffleArray(images);
     const screensaver = new Screensaver(window.images, window.screensaver_delay, document.getElementById('screensaver'));
+    document.getElementById("forward_btn").onclick = screensaver.showNextPhoto;
+    document.getElementById("back_btn").onclick = screensaver.showPreviousPhoto;
     screensaver.setAutoRotate();
   };
+
+  // Exit screensaver on any user interaction, excluding button presses
+  const exitScreensaver = (event) => {
+    // Check if the event came from the buttons
+    const targetElement = event.target;
+    if (
+        targetElement.id === "forward_btn" || // Ignore forward button
+        targetElement.id === "back_btn" || // Ignore backward button
+        targetElement.closest("#forward_btn") || // Ignore forward button icon
+        targetElement.closest("#back_btn") // Ignore backward button icon
+    ) {
+       // Don't trigger screensaver exit
+    } else {
+      location.href = "/display/"
+    }
+
+  };
+
+  // Attach event listeners for user interaction
+  document.addEventListener("mousemove", exitScreensaver);
+  document.addEventListener("keypress", exitScreensaver);
+  document.addEventListener("click", exitScreensaver);
+  document.addEventListener("touchstart", exitScreensaver);
 
   initializeScreensaver();
 });
