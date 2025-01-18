@@ -33,12 +33,32 @@ def merge_configs():
 
 
 def deploy_app():
-	"""Pull latest changes, update config, install dependencies, and restart the app."""
+	"""Pull the latest release, update config, install dependencies, and restart the app."""
 	with open(config_path, "r") as f:
 		config = json.load(f)
+
 	try:
-		# Pull latest changes
-		subprocess.run(["git", "pull", "origin", "main"], check=True, cwd=repo_dir)
+		# Fetch all tags (releases)
+		subprocess.run(["git", "fetch", "--tags"], check=True, cwd=repo_dir)
+
+		# Get the latest release tag (assuming it follows semantic versioning)
+		result = subprocess.run(["git", "tag", "-l"], capture_output=True, text=True, cwd=repo_dir)
+		tags = result.stdout.strip().split("\n")
+
+		if not tags:
+			print("No tags found in the repository.")
+			return
+
+		latest_tag = sorted(tags, reverse=True)[0]  # Get the latest tag
+
+		if not latest_tag:
+			print("No valid tags found.")
+			return
+
+		print(f"Deploying version: {latest_tag}")
+
+		# Checkout the latest release tag
+		subprocess.run(["git", "checkout", latest_tag], check=True, cwd=repo_dir)
 
 		# Update configuration
 		merge_configs()
@@ -51,9 +71,9 @@ def deploy_app():
 			subprocess.run(["sudo", "systemctl", "restart", config["systemctl_service_name"]], check=True)
 		except subprocess.CalledProcessError:
 			print(
-				"Systemctl failed to restart the service. Make sure it is running. If you're not on linux, ignore this message.")
+				"Systemctl failed to restart the service. Make sure it is running. If you're not on Linux, ignore this message.")
 
-		print("Deployment completed successfully!")
+		print(f"Deployment to version {latest_tag} completed successfully!")
 	except subprocess.CalledProcessError as e:
 		print(f"Deployment failed: {e}")
 
