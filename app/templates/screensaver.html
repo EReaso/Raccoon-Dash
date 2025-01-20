@@ -4,7 +4,22 @@
 
 {% block body %}
 	<div class="vw-100 vh-100 bg-black d-flex align-items-center justify-content-center m-0 p-0">
-		<img src="{{ image }}" id="screensaver" class="object-fit-contain">
+		<!-- Backward Button -->
+		<button id="back_btn"
+		        class="btn btn-dark position-absolute top-50 start-0 translate-middle-y d-flex align-items-center justify-content-center text-white"
+		        aria-label="Previous">
+			<i class="bi bi-arrow-left"></i> <!-- Bootstrap Left Arrow Icon -->
+		</button>
+
+		<!-- Screensaver Image -->
+		<img src="{{ image }}" id="screensaver" class="object-fit-cover mw-100 mh-100">
+
+		<!-- Forward Button -->
+		<button id="forward_btn"
+		        class="btn btn-dark position-absolute top-50 end-0 translate-middle-y d-flex align-items-center justify-content-center text-white"
+		        aria-label="Next">
+			<i class="bi bi-arrow-right"></i> <!-- Bootstrap Right Arrow Icon -->
+		</button>
 	</div>
 	<script defer>
       window.screensaver_delay = {{ delay }} * 1000;
