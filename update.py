@@ -1,5 +1,6 @@
 import json
 import os
+import re
 import subprocess
 
 # Define paths
@@ -58,7 +59,7 @@ def deploy_app():
 		print(f"Deploying version: {latest_tag}")
 
 		# Checkout the latest release tag
-		subprocess.run(["git", "checkout", latest_tag], check=True, cwd=repo_dir)
+		checkout = subprocess.run(["git", "checkout", latest_tag], check=True, cwd=repo_dir)
 
 		# Update configuration
 		merge_configs()
@@ -67,11 +68,12 @@ def deploy_app():
 		subprocess.run(["pip", "install", "-r", "requirements.txt"], check=True, cwd=repo_dir)
 
 		# Restart the service
-		try:
-			subprocess.run(["sudo", "systemctl", "restart", config["systemctl_service_name"]], check=True)
-		except subprocess.CalledProcessError:
-			print(
-				"Systemctl failed to restart the service. Make sure it is running. If you're not on Linux, ignore this message.")
+		if len(list(re.findall("Already", checkout.stdout))) < 1:
+			try:
+				subprocess.run(["sudo", "systemctl", "restart", config["systemctl_service_name"]], check=True)
+			except subprocess.CalledProcessError:
+				print(
+					"Systemctl failed to restart the service. Make sure it is running. If you're not on Linux, ignore this message.")
 
 		print(f"Deployment to version {latest_tag} completed successfully!")
 	except subprocess.CalledProcessError as e:
