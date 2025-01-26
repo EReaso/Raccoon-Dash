@@ -70,7 +70,7 @@ def deploy_app():
 		# Restart the service
 		if len(list(re.findall("Already", checkout.stdout))) < 1:
 			try:
-				subprocess.run(["sudo", "systemctl", "restart", config["systemctl_service_name"]], check=True)
+				subprocess.run(["sudo", "systemctl", "restart", "Raccoon-Dash"], check=True)
 			except subprocess.CalledProcessError:
 				print(
 					"Systemctl failed to restart the service. Make sure it is running. If you're not on Linux, ignore this message.")

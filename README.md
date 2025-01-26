@@ -27,6 +27,8 @@ access.
 Clone the repo and run the update/install script, `update.py`. When using a systemctl service, ensure the default user
 can restart it. Simply run the server and open up `/display/` on the screen, and `/` to configure.
 
+When using systemctl, the service should be called Raccoon-Dash.
+
 ## Contribution
 
 Just make a PR! 
