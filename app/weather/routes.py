@@ -14,9 +14,6 @@ class WeatherFetchError(Exception):
 
 def get_weather(city, api_key):
 	"""Fetches weather data for the next 3 days and formats it."""
-
-	global last_fetch, last_data
-
 	base_url = "https://api.weatherapi.com/v1/forecast.json?days=10&"
 
 	complete_url = base_url + "key=" + api_key + "&q=" + city
