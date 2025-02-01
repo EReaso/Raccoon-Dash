@@ -65,10 +65,9 @@ def index():
 	weather_api_key = config["weather_api_key"]
 	weather_loc = config["weather_loc"]
 	hostname = socket.gethostname()
-	local_ip = socket.gethostbyname(hostname)
 	return render_template('display.html',
-	                      calendar_q_string=q_string,
-	                      weather_api_key=weather_api_key,
-	                      weather_loc=weather_loc,
-	                      local_ip=local_ip,
-	                      screensaver_delay=config['screensaver_delay'])
+	                       calendar_q_string=q_string,
+	                       weather_api_key=weather_api_key,
+	                       weather_loc=weather_loc,
+	                       screensaver_delay=config['screensaver_delay'],
+	                       hostname=hostname)

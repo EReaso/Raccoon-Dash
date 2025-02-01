@@ -39,7 +39,8 @@
 
 <script src="https://cdn.jsdelivr.net/npm/qr-creator/dist/qr-creator.min.js"></script>
 <script>
-	let screensaver_delay = {{ screensaver_delay }};
+  window.screensaver_delay = {{ screensaver_delay }};
+  window.hostname = {{ hostname }};
 </script>
 <script src="/static/js/display.js"></script>
 
