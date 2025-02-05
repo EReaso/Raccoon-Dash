@@ -80,3 +80,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
   initializeScreensaver();
 });
+
+setInterval(() => {
+  now = new Date();
+  document.querySelector("#clock").innerText = `${(now.getHours() % 12 < 1) ? 1 : now.getHours() % 12}:${now.getMinutes()}`;
+}, 500)
