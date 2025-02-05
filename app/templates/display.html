@@ -41,8 +41,8 @@
 
 	<script src="https://cdn.jsdelivr.net/npm/qr-creator/dist/qr-creator.min.js"></script>
 	<script>
-      window.screensaver_delay = {{ screensaver_delay }};
-      window.url = {{ hostname }};
+      window.screensaver_delay = {{ screensaver_delay | tojson }};
+      window.url = {{ hostname | tojson}};
 	</script>
 	<script src="/static/js/display.js"></script>
 
