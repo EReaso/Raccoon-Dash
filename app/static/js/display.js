@@ -24,17 +24,16 @@ function resetInactivityTimer() {
   }
 }
 
-// Only set up event listeners if screensaver is enabled
-if (window.screensaver_delay > 0) {
-  // Reset timer on any interaction
-  document.addEventListener('mousemove', resetInactivityTimer);
-  document.addEventListener('keypress', resetInactivityTimer);
-  document.addEventListener('click', resetInactivityTimer);
-  document.addEventListener('touchstart', resetInactivityTimer);
 
-  // Initial setup of timer
-  resetInactivityTimer();
-}
+// Reset timer on any interaction
+document.addEventListener('mousemove', resetInactivityTimer);
+document.addEventListener('keypress', resetInactivityTimer);
+document.addEventListener('click', resetInactivityTimer);
+document.addEventListener('touchstart', resetInactivityTimer);
+
+// Initial setup of timer
+resetInactivityTimer();
+
 
 // Generate QR code when modal is shown
 document.getElementById('qrModal').addEventListener('show.bs.modal', function () {
@@ -42,7 +41,7 @@ document.getElementById('qrModal').addEventListener('show.bs.modal', function ()
 
   // Generate QR code
   QrCreator.render({
-    text: window.rl,
+    text: window.url,
     radius: 0.5,
     ecLevel: 'H',
     fill: '#000000',
