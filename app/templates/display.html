@@ -2,10 +2,10 @@
 
 {% block title %}Raccoon Dash{% endblock %}
 {% block body %}
-	<div class="d-flex flex-row vw-100 vh-100" id="container">
+	<div class="d-flex flex-row vw-100 vh-100 mvh-100" id="container">
 		<iframe
-				src="https://calendar.google.com/calendar/embed?height=600&wkst=1&ctz=America%2FDenver&bgcolor=%23ffffff&showTitle=0&showPrint=0&showCalendars=0&showTz=0&{{ calendar_q_string }}"
-				id="cal" class="flex-fill"></iframe>
+				src="/calendar/agenda/"
+				id="cal" class="flex-fill overflow-y-hidden"></iframe>
 		<button id="drawer_btn" class="btn btn-primary">></button>
 		<div class="d-flex flex-column">
 			<div id="drawer" class="d-flex flex-column h-100">

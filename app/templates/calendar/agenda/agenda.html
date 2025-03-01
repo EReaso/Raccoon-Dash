@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% from "calendar/agenda/event.html" import render_event_card %}
+
+
+{% block body %}
+	<div class="d-flex flex-column flex-wrap gap-2 vh-100">
+		{% for date, events in days %}
+			{% with today = now.date()==date %}
+				<div class="card {% if not today %}bg-info{% else %}bg-warning text-primary shadow{% endif %} fs-3 flex-grow-0 flex-shrink-1">
+					<div class="card-body d-flex flex-wrap flex-column gap-1">
+						<h3 class="card-title">{{ '{}, {} {}'.format(weekdays[date.weekday()],months[date.month-1],date.day)  if not today else "Today" }}</h3>
+						{% for event in events %}
+							{{ render_event_card(now,today,event) }}
+						{% endfor %}
+					</div>
+				</div>
+			{% endwith %}
+		{% endfor %}
+	</div>
+{% endblock %}
