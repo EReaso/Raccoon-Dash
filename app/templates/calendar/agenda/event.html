@@ -1,0 +1,35 @@
+{% macro render_event_card(now,today,event) %}
+	<div class="card flex-shrink-1 shadow-sm">
+		<div class="card-body d-flex flex-row align-items-around gap-2 text-truncate">
+			{% with begin = event.begin, end = event.end, all_day = False %}
+				<span class="d-flex flex-row flex-wrap align-items-center gap-1 justify-content-around">
+				<span class="badge bg-warning-subtle border border-warning text-warning-emphasis">
+				{% if begin.time() != end.time() %}
+					{{ begin.hour % 12 }}:{{ begin.minute | zfill }}-{{ end.hour % 12 }}:{{ end.minute | zfill }}
+					{% elif today == date and now > begin and now < end %}{# Event is in progress #}
+					Now-{{ end.hour % 12 }}:{{ end.minute | zfill }}
+				{% else %}
+					{% set all_day = True %}
+					All Day
+				{% endif %}
+				</span>
+
+				<span class="badge bg-success-subtle border border-success text-success-emphasis"></span>
+
+					{% if today and not all_day %}
+						<span class="badge bg-danger-subtle text-danger-emphasis border border-danger">
+						{% if now > begin and now <= end %}
+							Ends {{ end.humanize() }}
+						{% elif now < begin and now <= end %}
+							Starts {{ begin.humanize() }}
+						{% else %}
+							Ended {{ begin.humanize() }}
+						{% endif %}
+					</span>
+					{% endif %}
+			</span>
+			{% endwith %}
+			{{ event.name }}
+		</div>
+	</div>
+{% endmacro %}
