@@ -1,0 +1,37 @@
+{% macro general_settings(config) %}
+	<div id="general-settings" class="card mb-4">
+		<div class="card-body">
+			<h4 class="mb-3">General Settings</h4>
+			<form method="POST" action="">
+				<div class="mb-3">
+					<label for="calendar_input" class="form-label">ICS Url</label>
+					<input id="calendar_input" class="form-control" name="calendar" type="text"
+					       required autocomplete="off" autocapitalize="off"
+					       value="{{ config['calendar'] }}">
+
+				</div>
+
+				<div class="mb-3">
+					<label for="upload_folder_input" class="form-label">Upload Path</label>
+					<input class="form-control" id="upload_folder_input" name="upload_folder"
+					       type="text" required value="{{ config['upload'] }}">
+					<div class="form-text"><i class="bi bi-info-circle me-1"></i> Path where photos will be
+						saved and read from
+					</div>
+				</div>
+
+				<div class="mb-3">
+					<label for="zip_code_input" class="form-label">Weather Zip Code</label>
+					<input class="form-control" id="zip_code_input" name="zip_code" type="text"
+					       maxlength="5" required pattern="\d{5}" value="{{ config['weather_loc'] }}">
+				</div>
+
+				<div class="text-end">
+					<button type="submit" class="btn btn-primary">
+						<i class="bi bi-save me-2"></i>Save Changes
+					</button>
+				</div>
+			</form>
+		</div>
+	</div>
+{% endmacro %}
