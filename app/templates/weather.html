@@ -11,7 +11,7 @@
 {% block body %}
 	<div class="container py-3 d-flex flex-column gap-3">
 		{% for day in data %}
-			<div class="border d-flex flex-row align-content-center gap-3 px-3 py-2 shadow rounded">
+			<div class="card d-flex flex-row align-content-center gap-3 px-3 py-2 shadow rounded">
 				<img class="object-fit-contain" src="{{ day['condition_icon_url'] }}">
 				<div><h2>{{ day["day"] }}</h2><small>{{ day["date"] }}</small></div>
 				<div class="vr"></div>
