@@ -241,3 +241,6 @@ fabric.properties
 # Development
 config.json
 upload
+
+**/.DS_Store
+!/app/main/routes.py

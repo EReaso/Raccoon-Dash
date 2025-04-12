@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% from "admin/photo_gallery.html" import photo_gallery %}
+{% from "admin/theme_settings.html" import theme_settings %}
+{% from "admin/screensaver_settings.html" import screensaver_settings %}
+{% from "admin/general_settings.html" import general_settings %}
+
+{% block title %}Raccoon Dash Settings{% endblock %}
+
+{% block body %}
+	<div class="d-flex">
+		<!-- Sidebar -->
+		<nav class="sidebar bg-light border-end p-3">
+			<ul class="nav flex-column">
+				<li class="nav-item"><a class="nav-link" href="#photo-gallery">Photo Gallery</a></li>
+				<li class="nav-item"><a class="nav-link" href="#theme-settings">Theme Settings</a></li>
+				<li class="nav-item"><a class="nav-link" href="#screensaver-settings">Screensaver Settings</a></li>
+				<li class="nav-item"><a class="nav-link" href="#general-settings">General Settings</a></li>
+			</ul>
+		</nav>
+
+		<!-- Main Content -->
+		<div class="container py-4">
+
+			{{ photo_gallery(photos, page, total_pages) }}
+
+			{{ theme_settings() }}
+
+			{{ screensaver_settings(config) }}
+
+			{{ general_settings(config) }}
+
+		</div>
+	</div>
+	<script src="/static/js/admin.js"></script>
+{% endblock %}
