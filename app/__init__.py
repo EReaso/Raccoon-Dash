@@ -1,12 +1,20 @@
 from flask import Flask
 
+from .config import Config
+
 app = Flask(__name__)
 
-# Initialize Flask extensions here
-# Register blueprints here
+app.config.from_object(Config)
+
+from app.extensions import sock
+
+sock.init_app(app)
+
 from app.main import bp as main_bp
+from app.main.theme import theme_bp
 
 app.register_blueprint(main_bp)
+app.register_blueprint(theme_bp)
 
 from app.weather import bp as weather_bp
 

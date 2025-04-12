@@ -1,0 +1,21 @@
+@import "../vendor/bootstrap-5.3.3/scss/functions";
+@import "../vendor/bootstrap-5.3.3/scss/variables";
+@import "../vendor/bootstrap-5.3.3/scss/_variables";
+@import "../vendor/bootstrap-5.3.3/scss/variables-dark";
+@import "../vendor/bootstrap-5.3.3/scss/_variables-dark";
+@import "../vendor/bootstrap-5.3.3/scss/maps";
+@import "../vendor/bootstrap-5.3.3/scss/mixins";
+@import "../vendor/bootstrap-5.3.3/scss/utilities";
+
+@import "../../dynamic_assets/variables";
+
+$colors: map-merge($colors, $custom-theme-colors);
+$theme-colors: map-merge($theme-colors, $custom-theme-colors);
+
+
+@import "custom.scss";
+
+@import "../vendor/bootstrap-5.3.3/scss/utilities/api";
+
+// Now import the full Bootstrap framework, after customizations
+@import "../vendor/bootstrap-5.3.3/scss/bootstrap";
