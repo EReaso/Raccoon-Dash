@@ -52,3 +52,12 @@ document.getElementById('deletePhotoBtn').addEventListener('click', async functi
     }
   }
 });
+
+fetch("/font_url/")
+.then(res => {
+  if (!res.ok) {
+    throw new Error(`HTTP error! Status: ${res.status}`);
+  }
+  return res.text();
+})
+.then(data => document.querySelector("#font_url_input").value = data);

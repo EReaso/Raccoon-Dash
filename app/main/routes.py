@@ -37,8 +37,7 @@ def admin():
 		                       config=config,
 		                       photos=photos,
 		                       page=page,
-		                       total_pages=total_pages,
-		                       theme=config.get("theme", {}))
+		                       total_pages=total_pages)
 	else:
 		# Handle POST request
 		with open(os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', '..', 'config.json')) as f:
