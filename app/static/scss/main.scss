@@ -7,10 +7,11 @@
 @import "../vendor/bootstrap-5.3.3/scss/mixins";
 @import "../vendor/bootstrap-5.3.3/scss/utilities";
 
-@import "variables";
+@import "../../dynamic_assets/variables";
 
 $colors: map-merge($colors, $custom-theme-colors);
 $theme-colors: map-merge($theme-colors, $custom-theme-colors);
+
 
 @import "custom.scss";
 

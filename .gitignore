@@ -244,3 +244,4 @@ upload
 
 **/.DS_Store
 !/app/main/routes.py
+!/app/dynamic_assets/
