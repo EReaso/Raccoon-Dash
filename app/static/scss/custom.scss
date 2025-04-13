@@ -1,0 +1,20 @@
+$card-bg: map-get($theme-colors, "card");
+$light: map-get($theme-colors, "light") !important;
+
+:root {
+	--bs-background: map-get($theme-colors, "background");
+}
+
+$utilities: map-merge(
+		$utilities, (
+		"background-color": map-merge(
+				map-get($utilities, "background-color"),
+				(
+					values: map-merge(
+							map-get(map-get($utilities, "background-color"), "values"),
+							("custom": map-get($theme-colors, "background"))
+					)
+				)
+		)
+	)
+);
